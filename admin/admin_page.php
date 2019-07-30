@@ -163,60 +163,112 @@ $objResult = mysqli_fetch_array($objQuery, MYSQLI_ASSOC);
               </div>
             </div>
           </div>
+        
+
+
           <div class="row">
-            <div class="col-md-4">
-              <div class="card card-chart">
-                <div class="card-header card-header-success">
-                  <div class="ct-chart" id="dailySalesChart"></div>
-                </div>
-                <div class="card-body">
-                  <h4 class="card-title">Daily Sales</h4>
-                  <p class="card-category">
-                    <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase in today sales.</p>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">access_time</i> updated 4 minutes ago
+            <div class="col-lg-12 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-tabs card-header-primary">
+                  <div class="nav-tabs-navigation">
+                    <div class="nav-tabs-wrapper">
+                      <span class="nav-tabs-title">Log beacon</span>
+                      <ul class="nav nav-tabs" data-tabs="tabs">
+                        <li class="nav-item">
+                          <a class="nav-link active" href="#profile" data-toggle="tab">
+                            <i class="material-icons">bug_report</i> Comment
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#messages" data-toggle="tab">
+                            <i class="material-icons">code</i> Website
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" href="#settings" data-toggle="tab">
+                            <i class="material-icons">cloud</i> Server
+                            <div class="ripple-container"></div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card card-chart">
-                <div class="card-header card-header-warning">
-                  <div class="ct-chart" id="websiteViewsChart"></div>
-                </div>
                 <div class="card-body">
-                  <h4 class="card-title">Email Subscriptions</h4>
-                  <p class="card-category">Last Campaign Performance</p>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">access_time</i> campaign sent 2 days ago
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="card card-chart">
-                <div class="card-header card-header-danger">
-                  <div class="ct-chart" id="completedTasksChart"></div>
-                </div>
-                <div class="card-body">
-                  <h4 class="card-title">Completed Tasks</h4>
-                  <p class="card-category">Last Campaign Performance</p>
-                </div>
-                <div class="card-footer">
-                  <div class="stats">
-                    <i class="material-icons">access_time</i> campaign sent 2 days ago
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                  <div class="table-responsive">
+                    <div class="table-responsive" id="profile">
+                      <table class="table">
+                        <tbody>
+                          <tr>
+                            <td>
+                                  #
+                            </td>
+                            <td>
+                                  Event Type
+                            </td>
+                            <td>
+                                  Name 
+                            </td>
+                            <td>
+                                  Beacon Type
+                            </td>
+                            <td>
+                                  Beacon Hwid
+                            </td>
+                            <td>
+                                  Message
+                            </td>
+                            <td>
+                                  TimeStamp
+                            </td>
 
 
 
+
+
+
+
+                            <?php include 'log.php' ?>
+                            <?php
+
+                            while ($result = mysqli_fetch_array($query, MYSQLI_ASSOC)) {
+                              ?>
+                            <tr>
+                              <td>
+                                <div align="center"><?php echo $result["log_id"]; ?></div>
+                              </td>
+                          
+                              <td><?php echo $result["member_name"]; ?></td>
+                              <td><?php echo $result["log_event"]; ?></td>
+                              <td><?php echo $result["log_beacon_type"]; ?></td>
+                              <td><?php echo $result["log_beacon_hwid"]; ?>  </td>
+                              <td><?php echo $result["log_text"]; ?></td>
+                              
+                              <td class="moment-format" ><?php 
+                              $timestamp = $result["log_timestamp"];
+                              
+                          
+                              echo date("Y-m-d H:i:s",($timestamp/1000)+25200); ?></td>
+                     
+
+                            </tr>
+
+
+
+                          <?php
+                          }
+                          ?>
+
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
 
 
 
@@ -405,5 +457,13 @@ $objResult = mysqli_fetch_array($objQuery, MYSQLI_ASSOC);
   <script src="assets/js/material-dashboard.js?v=2.1.1" type="text/javascript"></script>
   <!-- Material Dashboard DEMO methods, don't include it in your project! -->
   <script src="assets/demo/demo.js"></script>
+  <script>
+var fields = document.querySelectorAll('td.moment-format');
+fields.forEach(function(field, index) {
+  
+    field.textContent = moment(field.textContent).format('MMMM Do YYYY, h:mm:ss a');
+    
+})
+</script>
 
 </html>

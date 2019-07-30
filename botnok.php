@@ -16,7 +16,7 @@ $userPassword = "P@ssw0rd";
 $dbName = "beacon_maejo";
 
 $conn = mysqli_connect($serverName, $userName, $userPassword, $dbName);
-
+mysqli_set_charset($conn,"utf8");
 $sql = "SELECT * FROM beacon ";
 
 $query = mysqli_query($conn, $sql);
@@ -133,7 +133,27 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
     // คำสั่งรอรับการส่งค่ามาของ LINE Messaging API
     $content = file_get_contents('php://input');
     file_put_contents('log.txt', file_get_contents('php://input') . PHP_EOL, FILE_APPEND);
+    $jsonData = json_decode($content,true);
 
+    $eventtype = $jsonData["events"][0]["type"];
+    $replyToken = $jsonData["events"][0]["replyToken"];
+    // เก็บ userID
+    $userID = $jsonData["events"][0]["source"]["userId"];
+    // เก็บ text
+    $text = $jsonData["events"][0]["message"]["text"];
+    // เก็บ Timestamp
+    $timestamp = $jsonData["events"][0]["timestamp"];
+
+    $beacontype = $jsonData["events"][0]["beacon"]["type"];
+
+    $beaconhwid = $jsonData["events"][0]["beacon"]["hwid"];
+
+    $log = "INSERT INTO log (log_userid,log_event,log_text,log_beacon_type,log_beacon_hwid,log_timestamp) 
+		VALUES ('$userID','$eventtype','$text','$beacontype','$beaconhwid','$timestamp')";
+
+	$query = mysqli_query($conn,$log);
+
+    
     // กำหนดค่า signature สำหรับตรวจสอบข้อมูลที่ส่งมาว่าเป็นข้อมูลจาก LINE
     $hash = hash_hmac('sha256', $content, LINE_MESSAGE_CHANNEL_SECRET, true);
     $signature = base64_encode($hash);
@@ -229,23 +249,68 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
         $beaconhw = $eventObj->getHwId();
         $beaconuid = $eventObj->getUserId();
 
+         //-----------------------config---------------------------website--//
+
+         $web1 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='1' ";
+         $queryweb1 = mysqli_query($conn, $web1);
+         mysqli_set_charset($conn,"utf8");
+         $resweb1 = mysqli_fetch_array($queryweb1);
+
+         $web2 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='2' ";
+         $queryweb2 = mysqli_query($conn, $web2);
+         mysqli_set_charset($conn,"utf8");
+         $resweb2 = mysqli_fetch_array($queryweb2);
+
+         $web3 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='3' ";
+         $queryweb3 = mysqli_query($conn, $web3);
+         mysqli_set_charset($conn,"utf8");
+         $resweb3 = mysqli_fetch_array($queryweb3);
+
+
+         $web4 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='4' ";
+         $queryweb4 = mysqli_query($conn, $web4);
+         mysqli_set_charset($conn,"utf8");
+         $resweb4 = mysqli_fetch_array($queryweb4);
+
+
+         $web5 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='5' ";
+         $queryweb5 = mysqli_query($conn, $web5);
+         mysqli_set_charset($conn,"utf8");
+         $resweb5 = mysqli_fetch_array($queryweb5);
+
+
+         $web6 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='6' ";
+         $queryweb6 = mysqli_query($conn, $web6);
+         mysqli_set_charset($conn,"utf8");
+         $resweb6 = mysqli_fetch_array($queryweb6);
+
+         $web7 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='7' ";
+         $queryweb7 = mysqli_query($conn, $web7);
+         mysqli_set_charset($conn,"utf8");
+         $resweb7 = mysqli_fetch_array($queryweb7);
+
+         $web8 = "SELECT beacon_has_websiteinfo_websiteinfo_id FROM beacon_has_websiteinfo WHERE beacon_has_websiteinfo_beacon_id ='8' ";
+         $queryweb8 = mysqli_query($conn, $web8);
+         mysqli_set_charset($conn,"utf8");
+         $resweb8 = mysqli_fetch_array($queryweb8);
+
+
+         //--------------config header -----//
+
+
+         
+
+         //----sub header --//
+
+
         if ($beaconhw == "01265d5c2a") {
 
-            //  $textReplyMessage = 'THIS IS number เครื่องสอง '.$beaconhw;
-            $textReplyMessage = 'test =     ' . $result0["beacon_msg"];
-            //  $textReplyMessage =  'THIS IS number เครื่องสอง '.$beaconhw;
-            $replyData = new TextMessageBuilder($textReplyMessage);
-
+         
             $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_0 = '1' WHERE ble_base_member_uid = '$beaconuid'");
-        } else if ($beaconhw == "01265fcfaf") {
-            $textReplyMessage = 'THIS IS number เครื่องสอง ' . $beaconhw;
-            $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_1 = '1' WHERE ble_base_member_uid = '$beaconuid'");
-            //$sql = mysqli_query($conn, "INSERT INTO beacon VALUES (NULL, '$beaconuid', '$beaconhw','$date')");
-            $replyData = new TextMessageBuilder($textReplyMessage);
-            
-        } else if ($beaconhw == "012d56174b") {
-            $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_2 = '1' WHERE ble_base_member_uid = '$beaconuid'");
-
+            $beacon1 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='1' ";
+            $querybeacon1 = mysqli_query($conn,$beacon1);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon1 = mysqli_fetch_array($querybeacon1);
 
             // กำหนด action 4 ปุ่ม 4 ประเภท
             $actionBuilder = array(
@@ -255,15 +320,80 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_3.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb1["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
-            $imageUrl = 'https://www.pnall.co.th/apps/line/beacon_maejo/img/base/03_muscot.png';
+            $imageUrl = $resbeacon1["beacon_img_active"];
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
+                    ''.$resbeacon1["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
+                    'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
+                    $imageUrl, // กำหนด url รุปภาพ
+                    $actionBuilder  // กำหนด action object
+                )
+
+                
+            );
+            
+
+        } else if ($beaconhw == "01265fcfaf") {
+           
+            $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_1 = '1' WHERE ble_base_member_uid = '$beaconuid'");
+            $beacon2 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='2' ";
+            $querybeacon2 = mysqli_query($conn,$beacon2);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon2 = mysqli_fetch_array($querybeacon2);
+
+            // กำหนด action 4 ปุ่ม 4 ประเภท
+            $actionBuilder = array(
+                new MessageTemplateActionBuilder(
+                    'ศูนย์การเรียนรู้ที่ 2 ', // ข้อความแสดงในปุ่ม
+                    'This is Text' // ข้อความที่จะแสดงฝั่งผู้ใช้ เมื่อคลิกเลือก
+                ),
+                new UriTemplateActionBuilder(
+                    'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb2["beacon_has_websiteinfo_websiteinfo_id"]
+                ),
+               
+            );
+            $imageUrl = $resbeacon2["beacon_img_active"];
+            $replyData = new TemplateMessageBuilder(
+                'Button Template',
+                new ButtonTemplateBuilder(
+                    ''.$resbeacon2["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
+                    'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
+                    $imageUrl, // กำหนด url รุปภาพ
+                    $actionBuilder  // กำหนด action object
+                )
+
+                
+            );
+        } else if ($beaconhw == "012d56174b") {
+            $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_2 = '1' WHERE ble_base_member_uid = '$beaconuid'");
+            $beacon3 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='3' ";
+            $querybeacon3 = mysqli_query($conn,$beacon3);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon3 = mysqli_fetch_array($querybeacon3);
+
+            // กำหนด action 4 ปุ่ม 4 ประเภท
+            $actionBuilder = array(
+                new MessageTemplateActionBuilder(
+                    'ศูนย์การเรียนรู้ที่ 3 ', // ข้อความแสดงในปุ่ม
+                    'This is Text' // ข้อความที่จะแสดงฝั่งผู้ใช้ เมื่อคลิกเลือก
+                ),
+                new UriTemplateActionBuilder(
+                    'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb3["beacon_has_websiteinfo_websiteinfo_id"]
+                ),
+               
+            );
+            $imageUrl = $resbeacon3["beacon_img_active"];
+            $replyData = new TemplateMessageBuilder(
+                'Button Template',
+                new ButtonTemplateBuilder(
+                    ''.$resbeacon3["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
                     'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
@@ -291,7 +421,7 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_4.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb4["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
@@ -299,7 +429,7 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
+                    ''.$resbeacon4["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
                     'ศูนย์การเรียนรู้ที่ 4 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
@@ -313,7 +443,12 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
             // //$sql = mysqli_query($conn, "INSERT INTO beacon VALUES (NULL, '$beaconuid', '$beaconhw','$date')");
             // $replyData = new TextMessageBuilder($textReplyMessage);
         }else if ($beaconhw == "012db84e44") {
+          
             $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_4 = '1' WHERE ble_base_member_uid = '$beaconuid'");
+            $beacon5 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='5' ";
+            $querybeacon5 = mysqli_query($conn,$beacon5);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon5 = mysqli_fetch_array($querybeacon5);
 
 
             // กำหนด action 4 ปุ่ม 4 ประเภท
@@ -324,29 +459,34 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_5.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb5["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
-            $imageUrl = 'https://www.pnall.co.th/apps/line/beacon_maejo/img/base/05_muscot.png';
+            $imageUrl = $resbeacon5["beacon_img_active"];
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
-                    'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
+                    ''.$resbeacon5["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
+                    'ศูนย์การเรียนรู้ที่ 5 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
                 )
 
                 
             );
-            
+  
+
 
             // $textReplyMessage = 'THIS IS number เครื่องสาม '.$beaconhw;
             // //$sql = mysqli_query($conn, "INSERT INTO beacon VALUES (NULL, '$beaconuid', '$beaconhw','$date')");
             // $replyData = new TextMessageBuilder($textReplyMessage);
         }else if ($beaconhw == "012db8ebda") {
             $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_5 = '1' WHERE ble_base_member_uid = '$beaconuid'");
+            $beacon6 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='6' ";
+            $querybeacon6 = mysqli_query($conn,$beacon6);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon6 = mysqli_fetch_array($querybeacon6);
 
 
             // กำหนด action 4 ปุ่ม 4 ประเภท
@@ -357,15 +497,15 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_6.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb6["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
-            $imageUrl = 'https://www.pnall.co.th/apps/line/beacon_maejo/img/base/06_muscot.png';
+            $imageUrl = $resbeacon6["beacon_img_active"];
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
+                    ''.$resbeacon6["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
                     'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
@@ -381,6 +521,12 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
         }else if ($beaconhw == "012dbae387") {
             $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_6 = '1' WHERE ble_base_member_uid = '$beaconuid'");
 
+            $beacon7 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='7' ";
+            $querybeacon7 = mysqli_query($conn,$beacon7);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon7 = mysqli_fetch_array($querybeacon7);
+
+
 
             // กำหนด action 4 ปุ่ม 4 ประเภท
             $actionBuilder = array(
@@ -390,15 +536,15 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_7.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb7["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
-            $imageUrl = 'https://www.pnall.co.th/apps/line/beacon_maejo/img/base/07_muscot.png';
+            $imageUrl = $resbeacon7["beacon_img_active"];
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
+                    ''.$resbeacon7["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
                     'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
@@ -413,6 +559,11 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
             // $replyData = new TextMessageBuilder($textReplyMessage);
         }else if ($beaconhw == "012dbbc5d6") {
             $sql = mysqli_query($conn, " UPDATE ble_base SET  ble_base_7 = '1' WHERE ble_base_member_uid = '$beaconuid'");
+            $beacon8 = "SELECT beacon_header,beacon_img_active FROM beacon WHERE beacon_id ='8' ";
+            $querybeacon8 = mysqli_query($conn,$beacon8);
+            mysqli_set_charset($conn,"utf8");
+            $resbeacon8 = mysqli_fetch_array($querybeacon8);
+
 
 
             // กำหนด action 4 ปุ่ม 4 ประเภท
@@ -423,16 +574,16 @@ $result0 = mysqli_fetch_array($query, MYSQLI_ASSOC)
                 ),
                 new UriTemplateActionBuilder(
                     'ข้อมูลเพื่มเติม', // ข้อความแสดงในปุ่ม
-                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/base_8.html'
+                    'https://www.pnall.co.th/apps/line/beacon_maejo/info/main.php?page='.$resweb8["beacon_has_websiteinfo_websiteinfo_id"]
                 ),
                
             );
-            $imageUrl = 'https://www.pnall.co.th/apps/line/beacon_maejo/img/base/08_muscot.png';
+            $imageUrl = $resbeacon8["beacon_img_active"];
             $replyData = new TemplateMessageBuilder(
                 'Button Template',
                 new ButtonTemplateBuilder(
-                    'คุณพบ น้องขวดใสแล้ว !!!', // กำหนดหัวเรื่อง
-                    'ศูนย์การเรียนรู้ที่ 1 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
+                    ''.$resbeacon8["beacon_header"], // ข้อความแสดงในปุ่ม // กำหนดหัวเรื่อง
+                    'ศูนย์การเรียนรู้ที่ 8 ยินดีต้อนรับครับ', // กำหนดรายละเอียด
                     $imageUrl, // กำหนด url รุปภาพ
                     $actionBuilder  // กำหนด action object
                 )
