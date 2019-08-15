@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>ระบบลงทะเบียนผู้ใช้งาน</title>
+
+<script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
+
+<script src="lib/jquery-3.3.1.min.js"></script>
+
+<script src="lib/bootstrap.min.js"></script>
+
+<link href="lib/bootstrap.min.css" rel="stylesheet" />
+
+
+
+<script>
+   
+
+//init LIFF
+
+function initializeApp(data) {
+
+let urlParams = new URLSearchParams(window.location.search);
+
+$('#name').val(urlParams.toString());
+
+$('#userid').val(data.context.userId);
+
+// $('#statusMessage').val(data.context.statusMessage);
+
+liff.getProfile()
+.then(profile => {
+  const name = profile.displayName
+  const statusMessage = profile.statusMessage
+  const picdisplay= profile.pictureUrl
+
+  
+
+  $('#displayName').val(profile.displayName);
+  $('#pictureUrl').val(profile.pictureUrl);
+  $('#statusMessage').val(profile.statusMessage);
+  
+})
+
+
+
+}
+
+
+//ready
+
+$(function () {
+
+//init LIFF
+
+liff.init(function (data) {
+
+initializeApp(data);
+
+});
+
+//ButtonGetProfile
+
+$('#ButtonGetProfile').click(function () {
+
+liff.getProfile().then(
+
+profile=> {
+
+$('#displayName').val(profile.displayName);
+
+alert('done');
+
+}
+
+);
+
+});
+
+//ButtonSendMsg #QueryString
+
+$('#ButtonSendMsg').click(function () {
+
+liff.sendMessages([
+
+{
+
+type: 'text',
+
+// text: $(‘#userid’).val() + $(‘#QueryString’).val() + $(‘#msg’).val()
+ text: $('คุณเคยลงทะเบียนแล้ว').val()
+
+}
+
+])
+
+.then(() => {
+
+alert('done');
+
+})
+
+});
+
+});
+
+</script>
+
+</head>
+
+<body>
+   
+        
+    
+
+    <div class="login-page">
+        <div class="form">
+             <img src="img/set1/act24.png" style='width:60%;' class="img-responsive-center"/>
+         
+          <form  action="save.php" method="get" class="login-form">
+            
+
+              <input class="form-control" type="hidden" id="userid" name="userid" /> <br />
+
+              <input class="form-control" type="hidden" id="displayName" name="displayName" /> <br />
+
+              <input class="form-control" type="hidden" id="pictureUrl" name="pictureUrl" /> <br />
+
+              <input class="form-control" type="hidden" id="statusMessage" name="statusMessage" /> <br />
+
+            <input type="text" placeholder="ชื่อนามสกุล"/>
+            <br>
+            
+          
+            <select name="member_type" class="custom-select">
+                <option value="" selected disabled>อาชีพ</option>
+                <option value="student">นักศึกษา</option>
+                <option value="faculty">ครู/อาจาร์ย</option>
+                <option value="normal">อื่นๆ</option>
+              </select>
+
+              <br><br>
+
+              <select name="member_gender" class="custom-select">
+                  <option value="" selected disabled>เพศ</option>
+                  <option value="male">ชาย</option>
+                  <option value="female">หญิง</option>
+                </select>
+  
+                <br><br>
+
+              <h1>อายุของคุณ : </h1>  <h1  id = "demo"></h1> 
+
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="100" value="" class="slider" name="myRange" id="myRange">
+                  </div>
+            
+                
+                  <input  type="hidden"id="myInput" type="text" value="" />
+              
+          
+          
+            <button id="sendmessagebutton" >สมัครสมาชิก</button>
+            <p class="message">หากมีปัญหาในการใช้งานกรุณาติดต่อเจ้าหน้าที่</p>
+          </form>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+<style>
+  .slidecontainer {
+  width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;  /* Override default CSS styles */
+  appearance: none;
+  width: 100%; /* Full-width */
+  height: 25px; /* Specified height */
+  background: #d3d3d3; /* Grey background */
+  outline: none; /* Remove outline */
+  opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+  -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+  transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+  opacity: 1; /* Fully shown on mouse-over */
+}
+
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+
+.slider::-moz-range-thumb {
+  width: 25px; /* Set a specific slider handle width */
+  height: 25px; /* Slider handle height */
+  background: #4CAF50; /* Green background */
+  cursor: pointer; /* Cursor on hover */
+}
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
+}
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.container:before, .container:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.container .info {
+  margin: 50px auto;
+  text-align: center;
+}
+.container .info h1 {
+  margin: 0 0 15px;
+  padding: 0;
+  font-size: 36px;
+  font-weight: 300;
+  color: #1a1a1a;
+}
+.container .info span {
+  color: #4d4d4d;
+  font-size: 12px;
+}
+.container .info span a {
+  color: #000000;
+  text-decoration: none;
+}
+.container .info span .fa {
+  color: #EF3B3A;
+}
+body {
+  background: #76b852; /* fallback for old browsers */
+  background: -webkit-linear-gradient(right, #76b852, #8DC26F);
+  background: -moz-linear-gradient(right, #76b852, #8DC26F);
+  background: -o-linear-gradient(right, #76b852, #8DC26F);
+  background: linear-gradient(to left, #76b852, #8DC26F);
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;      
+}
+</style>
+<script>
+$('.message a').click(function(){
+   $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+});
+
+document.getElementById('sendmessagebutton').addEventListener('click', function () {
+        liff.sendMessages([{
+            type: 'text',
+            text: "complete_register"
+        }]);
+    });
+
+var slider = document.getElementById("myRange");
+var output = document.getElementById("demo");
+output.innerHTML = slider.value; // Display the default slider value
+
+// Update the current slider value (each time you drag the slider handle)
+slider.oninput = function() {
+  output.innerHTML = this.value;
+  document.getElementById("myInput").value = output.innerHTML;
+}
+
+</script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
